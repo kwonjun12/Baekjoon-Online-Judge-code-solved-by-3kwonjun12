@@ -1,5 +1,5 @@
 #include <stdio.h>
-long long dp[46] = {0, 1, 1, 2}; 
+int dp[46] = {0, 1, 1, 2}; 
 
 int main(void){
    int n;
@@ -7,5 +7,5 @@ int main(void){
    for(int i = 4; i <= n; i++){
        dp[i] = dp[i - 1] + dp[i - 2];
    } 
-   printf("%lld", dp[n]); 
+   printf("%d", dp[n]); 
 }
