@@ -1,45 +1,37 @@
-#include <bits/stdc++.h>
-using namespace std;
+#include <stdio.h>
+#include <stdlib.h>
 
-typedef struct{
-    int x,y;
-}pos;
+int min(int a, int b) { 
+    return a < b ? a : b; 
+}
+int max(int a, int b) { 
+    return a > b ? a : b;
+}
 
-pos dots[100001];
+int n;
+int x[100000], y[100000];
 
-int main(void){
-    ios_base::sync_with_stdio(false);
-    cin.tie(0);
-    int n;
-    cin >> n;
-    int maxy = INT_MIN, miny = INT_MAX;
-    for(int i = 0; i < n; i++){
-        cin >> dots[i].x;
-        cin >> dots[i].y;
-        maxy = max(maxy, dots[i].y);
-        miny = min(miny, dots[i].y);
+int calc(int ref) {
+    int l = x[0] - abs(y[0] - ref);
+    int r = x[0] + abs(y[0] - ref);
+    for (int i = 1; i < n; i++) {
+        int d = abs(y[i] - ref);
+        l = min(l, x[i] - d);
+        r = max(r, x[i] + d);
     }
-    //a
-    int btm1 = INT_MAX;
-    int btm2 = INT_MAX;
-    for(int i = 0; i < n; i++){
-        btm1 = min(btm1, dots[i].y-dots[i].x);
-        btm2 = min(btm2, dots[i].y+dots[i].x);
+    return r - l;
+}
+
+int main(void) {
+    scanf("%d", &n);
+    for (int i = 0; i < n; i++)
+        scanf("%d %d", &x[i], &y[i]);
+
+    int mn = y[0], mx = y[0];
+    for (int i = 1; i < n; i++) {
+        if (y[i] < mn) mn = y[i];
+        if (y[i] > mx) mx = y[i];
     }
-    int dota = btm2-maxy;
-    int dotb = maxy-btm1;               
-    int ans1 = dotb-dota;  
-    //cout << dota << " " << dotb << endl;
-    //b
-    btm1 = INT_MIN;
-    btm2 = INT_MIN;
-    for(int i = 0; i < n; i++){
-        btm1 = max(btm1, dots[i].y+dots[i].x);
-        btm2 = max(btm2, dots[i].y-dots[i].x);
-    }
-    dota = btm1-miny;
-    dotb = miny-btm2;     
-    //cout << dota << " " << dotb << endl;
-    int ans2 = dota-dotb;
-    cout << min(ans1,ans2);               
+    int an = min(calc(mn), calc(mx));
+    printf("%d", an);
 }
